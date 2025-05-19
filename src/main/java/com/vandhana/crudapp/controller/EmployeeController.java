@@ -7,6 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.vandhana.crudapp.service.EmployeeService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -41,5 +44,12 @@ public class EmployeeController {
     public String deleteEmployee(@PathVariable Long id){
         service.deleteById(id);
         return "redirect:/employees";
+    }
+
+    @GetMapping("/by-department/{dept}")
+    @ResponseBody
+    public List<Employee> getByDepartment(@PathVariable String dept){
+        return service.getAll().stream().filter(emp->
+                dept.equalsIgnoreCase(emp.getDepartment())).collect(Collectors.toList());
     }
 }
